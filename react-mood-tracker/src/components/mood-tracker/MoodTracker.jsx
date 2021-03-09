@@ -14,7 +14,9 @@ export default class MoodTracker extends Component {
 
     // class field declaration method of defining state
     state = {
-        points: 11
+        points: 11,
+        noteInput: '',
+        noteData: []
     }
 
     // event handlers
@@ -35,15 +37,27 @@ export default class MoodTracker extends Component {
     }
     
     handleInputChange = (e) => {
-        console.log(e.target.value)
+        this.setState({
+            noteInput: e.target.value
+        }, () => console.log(this.state))
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        console.log('e')
+        console.log('submit function')
+        this.setState((prevState) => {
+            const newNoteData = {
+                note: prevState.noteInput,
+                date: new Date().toLocaleDateString(),
+                points: prevState.points
+            }
+            return {
+                noteData: prevState.noteData.concat([newNoteData])
+            }
+        })
     }
     render () {
-        const noteComponents = placeHolderNotes.map((placeHolderNote, index) => {
+        const noteComponents = this.state.noteData.map((placeHolderNote, index) => {
             return (
                 <MoodNote
                     key={`note ${index}`}
